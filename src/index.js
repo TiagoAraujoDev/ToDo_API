@@ -1,19 +1,15 @@
 const express = require("express");
+const cors = require("cors")
 const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 const users = [];
 
-function getTask(user, id) {
-  const todo = user.todo.find(task => task.id === id);
-
-  return todo;
-}
-
-function checkIfUserExistByUsername(req, res, next) {
+function checksExistsUserAccount(req, res, next) {
   const { username } = req.headers;
 
   const user = users.find(user => user.username === username);
@@ -40,7 +36,7 @@ app.post("/users", (req, res) => {
     id: uuidv4(),
     name,
     username,
-    todo: []
+    todos: []
   }
 
   users.push(newUser);
@@ -48,19 +44,13 @@ app.post("/users", (req, res) => {
   return res.status(201).json(newUser);
 });
 
-app.get("/user", checkIfUserExistByUsername, (req, res) => {
+app.get("/todos", checksExistsUserAccount, (req, res) => {
   const { user } = req;
 
-  return res.json(user);
+  return res.json(user.todos);
 });
 
-app.get("/todo", checkIfUserExistByUsername, (req, res) => {
-  const { user } = req;
-
-  return res.json(user.todo);
-});
-
-app.post("/todo", checkIfUserExistByUsername, (req, res) => {
+app.post("/todos", checksExistsUserAccount, (req, res) => {
   const { user } = req;
   const { title, deadline } = req.body;
 
@@ -69,20 +59,20 @@ app.post("/todo", checkIfUserExistByUsername, (req, res) => {
     title,
     done: false,
     deadline: new Date(deadline),
-    createAt: new Date()
+    created_at: new Date()
   }
 
-  user.todo.push(newTask);
+  user.todos.push(newTask);
 
   return res.status(201).json(newTask);
 });
 
-app.put("/todo/:id", checkIfUserExistByUsername, (req, res) => {
+app.put("/todos/:id", checksExistsUserAccount, (req, res) => {
   const { user } = req;
   const { title, deadline } = req.body;
   const { id } = req.params;
 
-  const task = getTask(user, id);
+  const task = user.todos.find(task => task.id === id);
 
   if (!task) {
     return res.status(404).json({ error: "Task not found!" });
@@ -91,14 +81,14 @@ app.put("/todo/:id", checkIfUserExistByUsername, (req, res) => {
   task.title = title;
   task.deadline = new Date(deadline);
 
-  return res.status(201).send();
+  return res.json(task);
 });
 
-app.patch("/todo/:id/done", checkIfUserExistByUsername, (req, res) => {
+app.patch("/todos/:id/done", checksExistsUserAccount, (req, res) => {
   const { user } = req;
   const { id } = req.params;
 
-  const task = getTask(user, id);
+  const task = user.todos.find(task => task.id === id);
 
   if (!task) {
     return res.status(404).json({ error: "Task not found!" });
@@ -106,25 +96,23 @@ app.patch("/todo/:id/done", checkIfUserExistByUsername, (req, res) => {
 
   task.done = true;
 
-  return res.status(201).send();
+  return res.json(task);
 });
 
-app.delete("/todo/:id", checkIfUserExistByUsername, (req, res) => {
+app.delete("/todos/:id", checksExistsUserAccount, (req, res) => {
   const { user } = req;
   const { id } = req.params;
 
-  const task = getTask(user, id);
+  const todoIndex = user.todos.findIndex(task => task.id === id);
 
-  if (!task) {
+  if (todoIndex === -1) {
     return res.status(404).json({ error: "Task not found!" });
   }
 
-  user.todo.splice(task, 1);
+  user.todos.splice(todoIndex, 1);
 
-  return res.status(201).send();
+  return res.status(204).json();
 });
 
-app.listen("8080", () => {
-  console.log("Server running...");
-});
+module.exports = app;
 
