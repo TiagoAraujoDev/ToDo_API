@@ -103,13 +103,13 @@ app.delete("/todos/:id", checksExistsUserAccount, (req, res) => {
   const { user } = req;
   const { id } = req.params;
 
-  const todoIndex = user.todos.findIndex(task => task.id === id);
+  const taskIndex = user.todos.findIndex(task => task.id === id);
 
-  if (todoIndex === -1) {
+  if (taskIndex === -1) {
     return res.status(404).json({ error: "Task not found!" });
   }
 
-  user.todos.splice(todoIndex, 1);
+  user.todos.splice(taskIndex, 1);
 
   return res.status(204).json();
 });
