@@ -1,23 +1,18 @@
 {
-  "name": "chalenge_i",
+  "name": "apitodo",
   "version": "1.0.0",
-  "description": "ToDo API",
   "main": "index.js",
+  "repository": "https://github.com/TiagoAraujoDev/ToDo_API.git",
+  "author": "TiagoAraujoDev <102497603+TiagoAraujoDev@users.noreply.github.com>",
+  "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "test": "jest"
+    "dev": "nodemon ./src/server.js"
   },
-  "keywords": [],
-  "author": "Tiago Araujo",
-  "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
     "express": "^4.18.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "jest": "^28.1.1",
-    "nodemon": "^2.0.16",
-    "supertest": "^6.2.3"
+    "nodemon": "^2.0.18"
   }
 }
