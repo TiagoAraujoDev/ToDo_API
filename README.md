@@ -1,5 +1,5 @@
-<h1 align="center">PomoRoutine App</h1>
-<p align="center">Project to make a tool for productivity.</p>
+<h1 align="center">API</h1>
+<p align="center">Project to make a API that manage a ToDo App.</p>
 
 <p align="center">
  <a href="#pre-requisitos">Prerequisites</a> •
@@ -8,7 +8,7 @@
  <a href="#autor">Author</a>
 </p>
 <h4 align="center">
-    PomoRoutine App 🚀 in progress!
+    API 🚀 in progress!
 </h4>
 
 <h3 id="pre-requisitos">Pré-requisitos</h3>
@@ -20,7 +20,7 @@ Before starting, you will need to have the following tools installed on your mac
 
 Then run the following commands:
 
-<code>$ yarn</code>
+<code>$ yarn</code><br>
 <code>$ yarn dev</code>
 
 And now the server is running in:
